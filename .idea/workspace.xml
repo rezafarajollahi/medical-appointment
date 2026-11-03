@@ -4,9 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="33248634-7c1b-4cfc-ac70-f305487e8fa7" name="Changes" comment="fourth commit">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="33248634-7c1b-4cfc-ac70-f305487e8fa7" name="Changes" comment="add database backup">
+      <change afterPath="$PROJECT_DIR$/docs/phase1/گزارش فاز اول پروژه.docx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/accounts/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/phase1/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/phase1/er-diagram.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/phase1/process-1-doctor-availability.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/phase1/process-2-book-appointment.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/phase1/process-3-cancel-appointment.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/phase1/process-4-review-doctor.md" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -120,7 +126,15 @@
       <option name="project" value="LOCAL" />
       <updated>1793735172571</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="add database backup">
+      <option name="closed" value="true" />
+      <created>1793736287099</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1793736287099</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -131,6 +145,7 @@
     <MESSAGE value="second commit" />
     <MESSAGE value="third commit" />
     <MESSAGE value="fourth commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="fourth commit" />
+    <MESSAGE value="add database backup" />
+    <option name="LAST_COMMIT_MESSAGE" value="add database backup" />
   </component>
 </project>
