@@ -77,3 +77,5 @@ class PatientProfileAdmin(admin.ModelAdmin):
         "user__last_name",
         "user__phone_number",
     )
+
+# jfjfajfljflajflkajf
