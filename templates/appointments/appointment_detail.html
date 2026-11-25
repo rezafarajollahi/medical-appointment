@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load jalali_tags %}
+
+{% block title %}جزئیات نوبت{% endblock %}
+
+{% block content %}
+<div class="row g-3">
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h1 class="h5">اطلاعات نوبت</h1>
+        <p class="mb-1">تاریخ: {{ appointment.appointment_date|jalali_full|fa_digits }}</p>
+        <p class="mb-1">
+          ساعت: {{ appointment.start_time|time:"H:i"|fa_digits }}
+          تا {{ appointment.end_time|time:"H:i"|fa_digits }}
+        </p>
+        <p class="mb-1">وضعیت: {{ appointment.get_status_display }}</p>
+        <p class="mb-1">علت مراجعه: {{ appointment.patient_description|default:"-" }}</p>
+        {% if appointment.cancellation_reason %}
+          <p class="mb-1">دلیل لغو: {{ appointment.cancellation_reason }}</p>
+        {% endif %}
+
+        {% if can_close %}
+          <form method="post"
+                action="{% url 'appointments:update_status' appointment.pk %}"
+                class="d-flex gap-2 mt-3">
+            {% csrf_token %}
+            <button class="btn btn-success btn-sm" name="status" value="completed">
+              ویزیت انجام شد
+            </button>
+            <button class="btn btn-outline-danger btn-sm" name="status" value="no_show">
+              بیمار مراجعه نکرد
+            </button>
+          </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h2 class="h5">اطلاعات مراجعه‌کننده</h2>
+        <p class="mb-1">نام: {{ patient.get_full_name|default:patient.username }}</p>
+        <p class="mb-1">کد ملی: {{ patient.national_id|default:"-"|fa_digits }}</p>
+        <p class="mb-1">تلفن: {{ patient.phone_number|default:"-"|fa_digits }}</p>
+        <p class="mb-1">ایمیل: {{ patient.email }}</p>
+
+        {% if patient_profile %}
+          <p class="mb-1">تاریخ تولد: {{ patient_profile.date_of_birth|jalali_date|fa_digits }}</p>
+          <p class="mb-1">جنسیت: {{ patient_profile.get_gender_display|default:"-" }}</p>
+          <p class="mb-1">توضیحات پزشکی: {{ patient_profile.medical_notes|default:"-" }}</p>
+          <p class="mb-1">تماس اضطراری: {{ patient_profile.emergency_phone|default:"-"|fa_digits }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<a class="btn btn-outline-secondary mt-3" href="{% url 'appointments:doctor_list' %}">
+  بازگشت به لیست نوبت‌ها
+</a>
+{% endblock %}

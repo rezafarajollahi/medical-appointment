@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load jalali_tags %}
+
+{% block title %}{{ doctor }}{% endblock %}
+
+{% block content %}
+<div class="card mb-4">
+  <div class="card-body">
+    <h1 class="h4">{{ doctor }}</h1>
+    <p class="mb-1">تخصص: {{ doctor.specialty.name }}</p>
+    <p class="mb-1">شماره نظام پزشکی: {{ doctor.medical_code|fa_digits }}</p>
+    {% if doctor.clinic_name %}<p class="mb-1">مطب: {{ doctor.clinic_name }}</p>{% endif %}
+    <p class="mb-1">آدرس: {{ doctor.clinic_address }}</p>
+    {% if doctor.clinic_phone %}<p class="mb-1">تلفن: {{ doctor.clinic_phone|fa_digits }}</p>{% endif %}
+    <p class="mb-1">
+      هزینه ویزیت: {{ doctor.visit_fee|floatformat:0|fa_digits }} تومان
+      | مدت ویزیت: {{ doctor.visit_duration|fa_digits }} دقیقه
+    </p>
+    {% if doctor.avg_rating %}
+      <p class="mb-1">میانگین امتیاز: {{ doctor.avg_rating|floatformat:1|fa_digits }} از ۵</p>
+    {% endif %}
+    {% if doctor.bio %}<p class="mt-2">{{ doctor.bio|linebreaksbr }}</p>{% endif %}
+  </div>
+</div>
+
+<h2 class="h5">زمان‌های آزاد دو هفته آینده</h2>
+
+{% for day in days %}
+  <div class="card mb-2">
+    <div class="card-body">
+      <strong>{{ day.date|jalali_full|fa_digits }}</strong>
+      <div class="d-flex flex-wrap gap-2 mt-2">
+        {% for slot in day.slots %}
+          <a class="btn btn-outline-success btn-sm"
+             href="{% url 'appointments:book' doctor.pk day.url_date slot.url_time %}">
+            {{ slot.start|time:"H:i"|fa_digits }}
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% empty %}
+  <p class="alert alert-warning">در حال حاضر زمان آزادی برای این پزشک وجود ندارد.</p>
+{% endfor %}
+
+<h2 class="h5 mt-4">نظرات بیماران</h2>
+
+{% for review in reviews %}
+  <div class="card mb-2">
+    <div class="card-body">
+      <strong>{{ review.appointment.patient.first_name }}</strong>
+      - امتیاز {{ review.rating|fa_digits }} از ۵
+      {% if review.comment %}<p class="mb-0 mt-1">{{ review.comment }}</p>{% endif %}
+    </div>
+  </div>
+{% empty %}
+  <p class="text-muted">هنوز نظری ثبت نشده است.</p>
+{% endfor %}
+{% endblock %}

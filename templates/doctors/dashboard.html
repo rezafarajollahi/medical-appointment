@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load jalali_tags %}
+
+{% block title %}پنل پزشک{% endblock %}
+
+{% block content %}
+<h1 class="h4 mb-3">پنل {{ doctor }}</h1>
+
+{% if not doctor.is_verified %}
+  <div class="alert alert-warning">
+    پروفایل شما هنوز توسط مدیر سیستم تأیید نشده است و در لیست پزشکان نمایش داده نمی‌شود.
+  </div>
+{% endif %}
+
+<div class="row g-3 mb-4">
+  <div class="col-md-4">
+    <div class="card"><div class="card-body">
+      نوبت‌های تأییدشده پیش رو: <strong>{{ upcoming_count|fa_digits }}</strong>
+    </div></div>
+  </div>
+  <div class="col-md-4">
+    <div class="card"><div class="card-body">
+      کل نوبت‌ها: <strong>{{ total_count|fa_digits }}</strong>
+    </div></div>
+  </div>
+  <div class="col-md-4 d-flex gap-2 align-items-center">
+    <a class="btn btn-outline-primary btn-sm" href="{% url 'doctors:profile_edit' %}">ویرایش مشخصات</a>
+    <a class="btn btn-outline-primary btn-sm" href="{% url 'doctors:schedule' %}">برنامه حضور</a>
+  </div>
+</div>
+
+<h2 class="h5">نوبت‌های امروز</h2>
+<table class="table table-striped bg-white">
+  <thead>
+    <tr><th>ساعت</th><th>بیمار</th><th>وضعیت</th><th></th></tr>
+  </thead>
+  <tbody>
+    {% for appointment in today_appointments %}
+      <tr>
+        <td>{{ appointment.start_time|time:"H:i"|fa_digits }}</td>
+        <td>{{ appointment.patient }}</td>
+        <td>{{ appointment.get_status_display }}</td>
+        <td><a href="{% url 'appointments:doctor_detail' appointment.pk %}">جزئیات</a></td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="4" class="text-muted">برای امروز نوبتی ثبت نشده است.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

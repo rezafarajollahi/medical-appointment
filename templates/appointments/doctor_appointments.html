@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load jalali_tags %}
+
+{% block title %}نوبت‌های رزروشده{% endblock %}
+
+{% block content %}
+<h1 class="h4 mb-3">نوبت‌های رزروشده</h1>
+
+<div class="btn-group mb-3">
+  <a class="btn btn-sm {% if scope == 'today' %}btn-primary{% else %}btn-outline-primary{% endif %}"
+     href="?scope=today">امروز</a>
+  <a class="btn btn-sm {% if scope == 'upcoming' %}btn-primary{% else %}btn-outline-primary{% endif %}"
+     href="?scope=upcoming">پیش رو</a>
+  <a class="btn btn-sm {% if scope == 'past' %}btn-primary{% else %}btn-outline-primary{% endif %}"
+     href="?scope=past">گذشته</a>
+  <a class="btn btn-sm {% if scope == 'cancelled' %}btn-primary{% else %}btn-outline-primary{% endif %}"
+     href="?scope=cancelled">لغوشده</a>
+</div>
+
+<table class="table table-striped bg-white">
+  <thead>
+    <tr><th>بیمار</th><th>تاریخ</th><th>ساعت</th><th>وضعیت</th><th></th></tr>
+  </thead>
+  <tbody>
+    {% for appointment in appointments %}
+      <tr>
+        <td>{{ appointment.patient }}</td>
+        <td>{{ appointment.appointment_date|jalali_date|fa_digits }}</td>
+        <td>{{ appointment.start_time|time:"H:i"|fa_digits }}</td>
+        <td>{{ appointment.get_status_display }}</td>
+        <td>
+          <a href="{% url 'appointments:doctor_detail' appointment.pk %}">
+            اطلاعات مراجعه‌کننده
+          </a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="5" class="text-muted">نوبتی در این بخش وجود ندارد.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

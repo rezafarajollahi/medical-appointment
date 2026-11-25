@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load jalali_tags %}
+
+{% block title %}نوبت‌های من{% endblock %}
+
+{% block content %}
+<h1 class="h4 mb-3">نوبت‌های من</h1>
+
+<table class="table table-striped bg-white">
+  <thead>
+    <tr>
+      <th>پزشک</th><th>تخصص</th><th>تاریخ</th><th>ساعت</th><th>وضعیت</th><th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for appointment in appointments %}
+      <tr>
+        <td>{{ appointment.doctor }}</td>
+        <td>{{ appointment.doctor.specialty.name }}</td>
+        <td>{{ appointment.appointment_date|jalali_date|fa_digits }}</td>
+        <td>{{ appointment.start_time|time:"H:i"|fa_digits }}</td>
+        <td>{{ appointment.get_status_display }}</td>
+        <td>
+          {% if appointment.can_cancel %}
+            <a class="btn btn-outline-danger btn-sm"
+               href="{% url 'appointments:cancel' appointment.pk %}">لغو</a>
+          {% endif %}
+          {% if appointment.can_review %}
+            <a class="btn btn-outline-primary btn-sm"
+               href="{% url 'appointments:review' appointment.pk %}">ثبت نظر</a>
+          {% endif %}
+        </td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td colspan="6" class="text-muted">
+          هنوز نوبتی ندارید.
+          <a href="{% url 'doctors:list' %}">مشاهده پزشکان</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

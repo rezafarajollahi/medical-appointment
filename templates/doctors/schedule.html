@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load jalali_tags %}
+
+{% block title %}برنامه حضور{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-2">
+  <h1 class="h4">روزها و ساعات حضور</h1>
+  <a class="btn btn-primary btn-sm" href="{% url 'doctors:availability_create' %}">افزودن بازه حضور</a>
+</div>
+
+<table class="table table-striped bg-white">
+  <thead>
+    <tr><th>روز</th><th>از ساعت</th><th>تا ساعت</th><th>اعتبار</th><th></th></tr>
+  </thead>
+  <tbody>
+    {% for item in availabilities %}
+      <tr>
+        <td>{{ item.get_weekday_display }}</td>
+        <td>{{ item.start_time|time:"H:i"|fa_digits }}</td>
+        <td>{{ item.end_time|time:"H:i"|fa_digits }}</td>
+        <td>
+          {% if item.valid_from or item.valid_to %}
+            {{ item.valid_from|jalali_date|fa_digits }} تا {{ item.valid_to|jalali_date|fa_digits }}
+          {% else %}
+            همیشه
+          {% endif %}
+        </td>
+        <td>
+          <form method="post" action="{% url 'doctors:availability_delete' item.pk %}">
+            {% csrf_token %}
+            <button class="btn btn-outline-danger btn-sm">حذف</button>
+          </form>
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="5" class="text-muted">هنوز برنامه حضوری ثبت نکرده‌اید.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="d-flex justify-content-between align-items-center mb-2 mt-4">
+  <h2 class="h5">زمان‌های عدم حضور</h2>
+  <a class="btn btn-primary btn-sm" href="{% url 'doctors:timeoff_create' %}">ثبت عدم حضور</a>
+</div>
+
+<table class="table table-striped bg-white">
+  <thead>
+    <tr><th>تاریخ</th><th>بازه</th><th>دلیل</th><th></th></tr>
+  </thead>
+  <tbody>
+    {% for item in times_off %}
+      <tr>
+        <td>{{ item.date|jalali_date|fa_digits }}</td>
+        <td>
+          {% if item.start_time %}
+            {{ item.start_time|time:"H:i"|fa_digits }} تا {{ item.end_time|time:"H:i"|fa_digits }}
+          {% else %}
+            کل روز
+          {% endif %}
+        </td>
+        <td>{{ item.reason|default:"-" }}</td>
+        <td>
+          <form method="post" action="{% url 'doctors:timeoff_delete' item.pk %}">
+            {% csrf_token %}
+            <button class="btn btn-outline-danger btn-sm">حذف</button>
+          </form>
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="4" class="text-muted">زمان عدم حضوری ثبت نشده است.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

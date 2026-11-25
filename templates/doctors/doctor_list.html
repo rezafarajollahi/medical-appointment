@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}لیست پزشکان{% endblock %}
+
+{% block content %}
+<h1 class="h4 mb-3">پزشکان</h1>
+
+<form method="get" class="row g-2 mb-4">
+  <div class="col-md-6">{{ form.q }}</div>
+  <div class="col-md-4">{{ form.specialty }}</div>
+  <div class="col-md-2">
+    <button class="btn btn-primary w-100">جستجو</button>
+  </div>
+</form>
+
+<div class="row g-3">
+  {% for doctor in doctors %}
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <h2 class="h5">{{ doctor }}</h2>
+          <p class="mb-1">تخصص: {{ doctor.specialty.name }}</p>
+          <p class="mb-1 text-muted">{{ doctor.clinic_address }}</p>
+          <p class="mb-2">
+            هزینه ویزیت: {{ doctor.visit_fee|floatformat:0 }} تومان
+            {% if doctor.avg_rating %}
+              | امتیاز: {{ doctor.avg_rating|floatformat:1 }} از ۵
+            {% endif %}
+          </p>
+          <a class="btn btn-outline-primary btn-sm"
+             href="{% url 'doctors:detail' doctor.pk %}">
+            مشاهده و دریافت نوبت
+          </a>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p class="text-muted">پزشکی با این مشخصات پیدا نشد.</p>
+  {% endfor %}
+</div>
+{% endblock %}
